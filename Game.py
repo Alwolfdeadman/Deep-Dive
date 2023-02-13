@@ -23,7 +23,7 @@ class Game(arcade.Window):
         self.player = None
         self.p_sprite = "assets/TMP/0x72_16x16DungeonTileset.v5/items/npc_dwarf.png"
 
-        self.room_number = 0
+        self.room_number = 1
         self.tile_map = None
         self.room_name = None
         self.num_enemies = 0
