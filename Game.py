@@ -1,5 +1,6 @@
 import arcade
 import Player
+import Enemy
 from random import randint
 import time
 
@@ -19,7 +20,6 @@ class Game(arcade.Window):
     def __init__(self, w, h, t):
         super().__init__(w, h, t)  # call the parent class init to create the window
 
-        self.p_list = None
         self.player = None
         self.p_sprite = "assets/TMP/0x72_16x16DungeonTileset.v5/items/npc_dwarf.png"
 
@@ -36,12 +36,11 @@ class Game(arcade.Window):
         arcade.set_background_color(arcade.color.DARK_RED)
         self.start_time = 0
         self.last_button_press = 0
+        self.enemies = arcade.SpriteList()
 
     def setup(self):
         r_stats = self.find_cords(self.room_number)
-        self.p_list = arcade.SpriteList()
         self.player = Player.Player(self.p_sprite, r_stats[0], r_stats[1], SCREEN_W, SCREEN_H)
-        self.p_list.append(self.player)
 
         self.room_name = f"assets/maps/room{self.room_number}.tmx"
         layer_options = {
@@ -63,6 +62,13 @@ class Game(arcade.Window):
         else:
             self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.scene.get_sprite_list("walls"))
 
+         for i in range(0, r_stats):
+             num = randint(1, 35)
+             while True:
+                 x = randint()
+                 if
+             self.enemies.append(Enemy.Enemy(num, self.room_number, ))
+
     def on_draw(self):
         arcade.start_render()
         self.scene.draw()
@@ -70,7 +76,7 @@ class Game(arcade.Window):
         self.player.weapon_list.draw()
 
         current_time = time.time()
-        if current_time - self.start_time >= 0.7:
+        if current_time - self.start_time >= 0.6:
             for sword in self.player.weapon_list:
                 self.player.weapon_list.remove(sword)
                 self.start_time = current_time
@@ -138,31 +144,31 @@ class Game(arcade.Window):
         tmp = []
         match room_numb:
             case 0:
-                tmp.extend([584, 264, 664, 442])
+                tmp.extend([584, 264, 664, 442, 0])
             case 1:
-                tmp.extend([568, 76, 567, 614])
+                tmp.extend([568, 76, 567, 614, 11])
             case 2:
-                tmp.extend([536, 474, 520, 494])
+                tmp.extend([536, 474, 520, 494, 0])
             case 3:
-                tmp.extend([344, 234, 712, 440])
+                tmp.extend([344, 234, 712, 440, 7])
             case 4:
-                tmp.extend([568, 442, 360, 264])
+                tmp.extend([568, 442, 360, 264, 5])
             case 5:
-                tmp.extend([376, 344, 744, 360])
+                tmp.extend([376, 344, 744, 360, 5])
             case 6:
-                tmp.extend([56, 316, 1000, 296])
+                tmp.extend([56, 316, 1000, 296, 11])
             case 7:
-                tmp.extend([568, 58, 200, 616])
+                tmp.extend([568, 58, 200, 616, 13])
             case 8:
-                tmp.extend([568, 154, 554, 584])
+                tmp.extend([568, 154, 554, 584, 10])
             case 9:
-                tmp.extend([184, 42, 184, 568])
+                tmp.extend([184, 42, 184, 568, 8])
             case 10:
-                tmp.extend([232, 474, 426, 184])
+                tmp.extend([232, 474, 426, 184, 8])
             case 11:
-                tmp.extend([184, 346, 872, 344])
+                tmp.extend([184, 346, 872, 344, 1])
             case 12:
-                tmp.extend([568, 394, 552, 346])
+                tmp.extend([568, 394, 552, 346, 0])
         return tmp
 
 
