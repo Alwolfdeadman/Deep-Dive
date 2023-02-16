@@ -4,8 +4,8 @@ import Enemy
 from random import randint
 import time
 
-SCREEN_W = 1488
-SCREEN_H = 848
+SCREEN_W = 1488  # 1120
+SCREEN_H = 848  # 208
 
 """"
 -dobavi komentari
@@ -39,6 +39,9 @@ class Game(arcade.Window):
         self.start_time = 0
         self.last_button_press = 0
         self.enemies = arcade.SpriteList()
+
+        # text box
+        self.text_box = arcade.load_texture("assets/UI/text_box.png")
 
     def setup(self):
         self.enemies = arcade.SpriteList()
@@ -89,6 +92,7 @@ class Game(arcade.Window):
         self.scene.draw()
         self.player.draw()
         self.player.weapon_list.draw()
+        self.text_box.draw_scaled(560, 744)
 
         # so that the enemies vanish after death
         for enemy in self.enemies:
