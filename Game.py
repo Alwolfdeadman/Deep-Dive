@@ -10,8 +10,7 @@ SCREEN_H = 848
 """"
 -dobavi komentari
 - character sprite za dvigenie v vsichki posoki
-- ataka na geroq
-- enemi class
+- enemies movement with sword collision
 """
 
 
@@ -39,6 +38,7 @@ class Game(arcade.Window):
         self.enemies = arcade.SpriteList()
 
     def setup(self):
+        self.enemies = arcade.SpriteList()
         r_stats = self.find_cords(self.room_number)
         self.player = Player.Player(self.p_sprite, r_stats[0], r_stats[1], SCREEN_W, SCREEN_H)
 
@@ -63,15 +63,20 @@ class Game(arcade.Window):
             self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.scene.get_sprite_list("walls"))
 
         for i in range(0, r_stats[4]):
-            num = randint(1, 35)
             g_list = self.scene.get_sprite_list("floor")
             while True:
-                # print("i enter", i)
                 x = randint(1, 93)
                 y = randint(1, 53)
                 if arcade.get_sprites_at_point((x*16, y*16), g_list):
                     break
-            self.enemies.append(Enemy.Enemy(num, self.room_number, x*16, y*16))
+            if self.room_number != 11:
+                num = randint(1, 35)
+                path = f"assets/melee_monsters/monsters_1/monster{num}.png"
+                self.enemies.append(Enemy.Enemy(num, path, self.room_number, x * 16, y * 16, self.player))
+            else:
+                num = randint(1, 3)
+                path = f"assets/melee_monsters/bosses/boss{num}.png"
+                self.enemies.append(Enemy.Enemy(num, path, self.room_number, 794, 344, self.player))
 
     def on_draw(self):
         arcade.start_render()
@@ -80,7 +85,10 @@ class Game(arcade.Window):
         self.player.weapon_list.draw()
 
         for enemy in self.enemies:
-            enemy.draw()
+            if enemy.health > 1:
+                enemy.draw()
+            else:
+                self.enemies.remove(enemy)
 
         current_time = time.time()
         if current_time - self.start_time >= 0.6:
@@ -92,6 +100,8 @@ class Game(arcade.Window):
         r_stats = self.find_cords(self.room_number)
         self.player.update()
         self.physics_engine.update()
+        for enemy in self.enemies:
+            enemy.update()
 
         if (
                 r_stats[2] <= self.player.center_x <= (r_stats[2] + 16)
