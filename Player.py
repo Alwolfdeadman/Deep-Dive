@@ -70,7 +70,7 @@ class Player(arcade.Sprite):
         elif key == arcade.key.A or key == arcade.key.D:
             self.change_x = 0
 
-    def attack(self, enemy):
+    def attack(self):
         if self.look_dir == "up":
             self.weapon = arcade.Sprite("assets/character_classes_and_animations/weapons/swords/sword_up.png")
             self.weapon.center_x = self.center_x

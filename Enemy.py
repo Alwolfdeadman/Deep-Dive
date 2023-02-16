@@ -15,14 +15,6 @@ class Enemy(arcade.Sprite):
         self.num_of_monster = num
 
         self.damaging_textures = arcade.SpriteList()
-        self.damaging_textures.append(
-            arcade.Sprite("assets/character_classes_and_animations/weapons/swords/sword_up.png"))
-        self.damaging_textures.append(
-            arcade.Sprite("assets/character_classes_and_animations/weapons/swords/sword_down.png"))
-        self.damaging_textures.append(
-            arcade.Sprite("assets/character_classes_and_animations/weapons/swords/sword_left.png"))
-        self.damaging_textures.append(
-            arcade.Sprite("assets/character_classes_and_animations/weapons/swords/sword_right.png"))
 
         self.mon_lst = arcade.SpriteList()
         for i in range(1, 36):
@@ -31,6 +23,9 @@ class Enemy(arcade.Sprite):
         self.mon_lst.append(self.player)
 
     def update(self):
+        self.damaging_textures.clear()
+        self.damaging_textures.extend(self.player.weapon_list)
+
         if self.player.center_x == self.center_x:
             self.center_x += 0
         elif self.player.center_x < self.center_x:
@@ -45,26 +40,31 @@ class Enemy(arcade.Sprite):
             self.center_y += 0.5
 
 #they still aline and move as one
-        for sprite in self.collides_with_list(self.mon_lst):
-            tmp = randint(0, 4)
-            if isinstance(sprite, Player.Player):
-                if tmp == 0:
-                    self.center_y += 8
-                elif tmp == 1:
-                    self.center_y += -2
-                elif tmp == 2:
-                    self.center_x += 8
+        col_lst = arcade.check_for_collision_with_lists(self, [self.damaging_textures, self.mon_lst])
+        for sprite in self.mon_lst:
+            if arcade.check_for_collision(self, sprite):
+                tmp = randint(0, 4)
+                if isinstance(sprite, Player.Player):
+                    if tmp == 0:
+                        self.center_y += 8
+                    elif tmp == 1:
+                        self.center_y += -2
+                    elif tmp == 2:
+                        self.center_x += 8
+                    else:
+                        self.center_x += -2
                 else:
-                    self.center_x += -2
-            else:
-                if tmp == 0:
-                    self.center_y += 16
-                elif tmp == 1:
-                    self.center_y += -16
-                elif tmp == 2:
-                    self.center_x += 16
-                else:
-                    self.center_x += -16
-        if self.collides_with_list(self.damaging_textures):
-            print(self.health)
-            self.health -= self.player.attack_power
+                    if tmp == 0:
+                        self.center_y += 16
+                    elif tmp == 1:
+                        self.center_y += -16
+                    elif tmp == 2:
+                        self.center_x += 16
+                    else:
+                        self.center_x += -16
+
+        for dam in self.damaging_textures:
+            if arcade.check_for_collision(dam, self):
+                print(self.health)
+                self.health -= self.player.attack_power
+                break

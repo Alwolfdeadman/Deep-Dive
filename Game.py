@@ -143,7 +143,6 @@ class Game(arcade.Window):
             self.setup()
 
     def on_key_press(self, key, modifiers):
-        enemy = None
         self.player.on_key_press(key, modifiers)
         # if key == arcade.key.J:
         #     self.player.attack()
@@ -152,7 +151,7 @@ class Game(arcade.Window):
         if current_time - self.last_button_press >= 0.5:
             if key == arcade.key.J:
                 self.last_button_press = current_time
-                self.player.attack(enemy)
+                self.player.attack()
 
     def on_key_release(self, key, modifiers):
         self.player.on_key_release(key, modifiers)
