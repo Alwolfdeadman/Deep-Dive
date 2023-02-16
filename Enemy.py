@@ -39,30 +39,6 @@ class Enemy(arcade.Sprite):
         elif self.player.center_y > self.center_y:
             self.center_y += 0.5
 
-#they still aline and move as one
-        col_lst = arcade.check_for_collision_with_lists(self, [self.damaging_textures, self.mon_lst])
-        for sprite in self.mon_lst:
-            if arcade.check_for_collision(self, sprite):
-                tmp = randint(0, 4)
-                if isinstance(sprite, Player.Player):
-                    if tmp == 0:
-                        self.center_y += 8
-                    elif tmp == 1:
-                        self.center_y += -2
-                    elif tmp == 2:
-                        self.center_x += 8
-                    else:
-                        self.center_x += -2
-                else:
-                    if tmp == 0:
-                        self.center_y += 16
-                    elif tmp == 1:
-                        self.center_y += -16
-                    elif tmp == 2:
-                        self.center_x += 16
-                    else:
-                        self.center_x += -16
-
         for dam in self.damaging_textures:
             if arcade.check_for_collision(dam, self):
                 print(self.health)

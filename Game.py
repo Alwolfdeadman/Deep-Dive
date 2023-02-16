@@ -100,8 +100,32 @@ class Game(arcade.Window):
         r_stats = self.find_cords(self.room_number)
         self.player.update()
         self.physics_engine.update()
+
+        self.num_enemies = len(self.enemies)
+        
+        # check for collision between enemies and enemies and enemies and player
         for enemy in self.enemies:
             enemy.update()
+            if arcade.check_for_collision(self.player, enemy):
+                tmp = randint(0, 4)
+                if tmp == 0:
+                    enemy.center_y += 16
+                elif tmp == 1:
+                    enemy.center_y += -16
+                elif tmp == 2:
+                    enemy.center_x += 16
+                else:
+                    enemy.center_x += -16
+            elif arcade.check_for_collision_with_list(enemy, self.enemies):
+                tmp = randint(0, 4)
+                if tmp == 0:
+                    enemy.center_y += 8
+                elif tmp == 1:
+                    enemy.center_y += -2
+                elif tmp == 2:
+                    enemy.center_x += 8
+                else:
+                    enemy.center_x += -2
 
         if (
                 r_stats[2] <= self.player.center_x <= (r_stats[2] + 16)
