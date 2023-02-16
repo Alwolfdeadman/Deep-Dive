@@ -11,6 +11,7 @@ SCREEN_H = 848
 -dobavi komentari
 - character sprite za dvigenie v vsichki posoki
 - enemies movement with sword collision
+- what happens when the player dies
 """
 
 
@@ -18,21 +19,23 @@ class Game(arcade.Window):
 
     def __init__(self, w, h, t):
         super().__init__(w, h, t)  # call the parent class init to create the window
-
+        # player things
         self.player = None
         self.p_sprite = "assets/TMP/0x72_16x16DungeonTileset.v5/items/npc_dwarf.png"
 
+        # physics and map
         self.room_number = 0
         self.tile_map = None
         self.room_name = None
         self.num_enemies = 0
         self.rooms_passed = 0
         self.dungeon_size = 3
-
+        self.walls = None
         self.scene = None
         self.physics_engine = None
-        
         arcade.set_background_color(arcade.color.DARK_RED)
+
+        # other useful stuff
         self.start_time = 0
         self.last_button_press = 0
         self.enemies = arcade.SpriteList()
@@ -42,6 +45,7 @@ class Game(arcade.Window):
         r_stats = self.find_cords(self.room_number)
         self.player = Player.Player(self.p_sprite, r_stats[0], r_stats[1], SCREEN_W, SCREEN_H)
 
+        # map/room preping and pyisics
         self.room_name = f"assets/maps/room{self.room_number}.tmx"
         layer_options = {
             "walls": {
@@ -50,18 +54,19 @@ class Game(arcade.Window):
         }
         self.tile_map = arcade.load_tilemap(self.room_name, 1, layer_options)
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
-
         if self.tile_map.background_color:
             arcade.set_background_color(self.tile_map.background_color)
         if self.room_number == 2:
-            self.physics_engine = arcade.PhysicsEngineSimple(self.player, (self.scene.get_sprite_list("walls"),
-                                                                           self.scene.get_sprite_list("pit1")))
+            self.walls = (self.scene.get_sprite_list("walls"), self.scene.get_sprite_list("pit1"))
+            self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.walls)
         elif self.room_number == 6:
-            self.physics_engine = arcade.PhysicsEngineSimple(self.player, (self.scene.get_sprite_list("walls"),
-                                                                           self.scene.get_sprite_list("floor2")))
+            self.walls = (self.scene.get_sprite_list("walls"), self.scene.get_sprite_list("floor2"))
+            self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.walls)
         else:
-            self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.scene.get_sprite_list("walls"))
+            self.walls = self.scene.get_sprite_list("walls")
+            self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.walls)
 
+        # enemy placement
         for i in range(0, r_stats[4]):
             g_list = self.scene.get_sprite_list("floor")
             while True:
@@ -72,11 +77,12 @@ class Game(arcade.Window):
             if self.room_number != 11:
                 num = randint(1, 35)
                 path = f"assets/melee_monsters/monsters_1/monster{num}.png"
-                self.enemies.append(Enemy.Enemy(num, path, self.room_number, x * 16, y * 16, self.player))
+                self.enemies.append(Enemy.Enemy(num, path, self.room_number, x * 16, y * 16, self.player, self.walls))
             else:
                 num = randint(1, 3)
                 path = f"assets/melee_monsters/bosses/boss{num}.png"
-                self.enemies.append(Enemy.Enemy(num, path, self.room_number, 794, 344, self.player))
+                self.enemies.append(Enemy.Enemy(num, path, self.room_number, 794, 344, self.player, self.walls))
+            self.enemies[i].setup_pysics()
 
     def on_draw(self):
         arcade.start_render()
@@ -84,12 +90,14 @@ class Game(arcade.Window):
         self.player.draw()
         self.player.weapon_list.draw()
 
+        # so that the enemies vanish after death
         for enemy in self.enemies:
             if enemy.health > 1:
                 enemy.draw()
             else:
                 self.enemies.remove(enemy)
 
+        # used so that the sword stays on screen for a bit
         current_time = time.time()
         if current_time - self.start_time >= 0.6:
             for sword in self.player.weapon_list:
@@ -101,12 +109,11 @@ class Game(arcade.Window):
         self.player.update()
         self.physics_engine.update()
 
-        self.num_enemies = len(self.enemies)
-        
         # check for collision between enemies and enemies and enemies and player
         for enemy in self.enemies:
             enemy.update()
             if arcade.check_for_collision(self.player, enemy):
+                self.player.health -= 10
                 tmp = randint(0, 4)
                 if tmp == 0:
                     enemy.center_y += 16
@@ -127,6 +134,8 @@ class Game(arcade.Window):
                 else:
                     enemy.center_x += -2
 
+        # movement between rooms
+        self.num_enemies = len(self.enemies)
         if (
                 r_stats[2] <= self.player.center_x <= (r_stats[2] + 16)
                 and r_stats[3] <= self.player.center_y <= r_stats[3] + 16

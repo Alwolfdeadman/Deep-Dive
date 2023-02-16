@@ -17,6 +17,7 @@ class Player(arcade.Sprite):
         self.look_dir = None
         self.p_class = "k"
 
+        self.health = 100
         self.attack_power = 20
         self.weapon = None
         self.weapon_list = arcade.SpriteList()
