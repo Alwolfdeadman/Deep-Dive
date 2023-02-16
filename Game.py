@@ -10,7 +10,6 @@ SCREEN_H = 848  # 208
 """"
 -dobavi komentari
 - character sprite za dvigenie v vsichki posoki
-- enemies movement with sword collision
 - what happens when the player dies
 """
 

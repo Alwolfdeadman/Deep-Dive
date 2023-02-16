@@ -35,19 +35,18 @@ class Enemy(arcade.Sprite):
         if self.player.center_x == self.center_x:
             self.center_x += 0
         elif self.player.center_x < self.center_x:
-            self.center_x += -0.5
+            self.center_x += -0.3
         elif self.player.center_x > self.center_x:
-            self.center_x += 0.5
+            self.center_x += 0.3
         if self.player.center_y == self.center_y:
             self.center_y += 0
         elif self.player.center_y < self.center_y:
-            self.center_y += -0.5
+            self.center_y += -0.3
         elif self.player.center_y > self.center_y:
-            self.center_y += 0.5
+            self.center_y += 0.3
 
         # to take damage from attacks
         for dam in self.damaging_textures:
             if arcade.check_for_collision(dam, self):
-                print(self.health)
                 self.health -= self.player.attack_power
                 break
