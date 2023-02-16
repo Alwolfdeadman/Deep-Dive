@@ -4,8 +4,8 @@ import Enemy
 from random import randint
 import time
 
-SCREEN_W = 1480
-SCREEN_H = 840
+SCREEN_W = 1488
+SCREEN_H = 848
 
 """"
 -dobavi komentari
@@ -28,7 +28,7 @@ class Game(arcade.Window):
         self.room_name = None
         self.num_enemies = 0
         self.rooms_passed = 0
-        self.dungeon_size = 1
+        self.dungeon_size = 3
 
         self.scene = None
         self.physics_engine = None
@@ -62,18 +62,25 @@ class Game(arcade.Window):
         else:
             self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.scene.get_sprite_list("walls"))
 
-         for i in range(0, r_stats):
-             num = randint(1, 35)
-             while True:
-                 x = randint()
-                 if
-             self.enemies.append(Enemy.Enemy(num, self.room_number, ))
+        for i in range(0, r_stats[4]):
+            num = randint(1, 35)
+            g_list = self.scene.get_sprite_list("floor")
+            while True:
+                # print("i enter", i)
+                x = randint(1, 93)
+                y = randint(1, 53)
+                if arcade.get_sprites_at_point((x*16, y*16), g_list):
+                    break
+            self.enemies.append(Enemy.Enemy(num, self.room_number, x*16, y*16))
 
     def on_draw(self):
         arcade.start_render()
         self.scene.draw()
         self.player.draw()
         self.player.weapon_list.draw()
+
+        for enemy in self.enemies:
+            enemy.draw()
 
         current_time = time.time()
         if current_time - self.start_time >= 0.6:
