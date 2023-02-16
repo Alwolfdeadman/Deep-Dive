@@ -14,10 +14,39 @@ SCREEN_H = 848  # 208
 """
 
 
-class Game(arcade.Window):
+class MainMenu(arcade.View):
+    def on_show_view(self):
+        arcade.set_background_color(arcade.color.AMETHYST)
 
-    def __init__(self, w, h, t):
-        super().__init__(w, h, t)  # call the parent class init to create the window
+    def on_draw(self):
+        """Draw the menu"""
+        self.clear()
+        arcade.draw_text(
+            "Play",
+            SCREEN_W / 2,
+            SCREEN_H / 2 + 50,
+            arcade.color.BLACK,
+            font_size=30,
+            anchor_x="center",
+        )
+        arcade.draw_text(
+            "Exit",
+            SCREEN_W / 2,
+            SCREEN_H / 2 - 50,
+            arcade.color.BLACK,
+            font_size=30,
+            anchor_x="center",
+        )
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        """Use a mouse press to advance to the 'game' view."""
+        game_view = Game()
+        self.window.show_view(game_view)
+
+
+class Game(arcade.View):
+    def __init__(self):
+        super().__init__()  # call the parent class init to create the window
         # player things
         self.player = None
         self.p_sprite = "assets/TMP/0x72_16x16DungeonTileset.v5/items/npc_dwarf.png"
@@ -41,6 +70,7 @@ class Game(arcade.Window):
 
         # text box
         self.text_box = arcade.load_texture("assets/UI/text_box.png")
+        self.setup()
 
     def setup(self):
         self.enemies = arcade.SpriteList()
@@ -126,6 +156,10 @@ class Game(arcade.Window):
                     enemy.center_x += 16
                 else:
                     enemy.center_x += -16
+                if self.player.health < 1:
+                    game_over = GameOver()
+                    self.window.show_view(game_over)
+                    return
             elif arcade.check_for_collision_with_list(enemy, self.enemies):
                 tmp = randint(0, 4)
                 if tmp == 0:
@@ -224,9 +258,31 @@ class Game(arcade.Window):
         return tmp
 
 
+class GameOver(arcade.View):
+    def on_show_view(self):
+        arcade.set_background_color(arcade.color.BLACK)
+
+    def on_draw(self):
+        """Draw the game overview"""
+        self.clear()
+        arcade.draw_text(
+            "Game Over Click to Exit",
+            SCREEN_W / 2,
+            SCREEN_H / 2,
+            arcade.color.WHITE,
+            30,
+            anchor_x="center",
+        )
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        # game_view = Game()
+        # self.window.show_view(game_view)
+        arcade.close_window()
+
 def main():
-    window = Game(SCREEN_W, SCREEN_H, "asa")
-    window.setup()
+    window = arcade.Window(SCREEN_W, SCREEN_H, "DeepDive")
+    menu_view = MainMenu()
+    window.show_view(menu_view)
     arcade.run()
 
 
