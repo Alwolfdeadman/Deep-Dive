@@ -11,7 +11,10 @@ SCREEN_H = 848  # 208
 """"
 -dobavi komentari
 - character sprite za dvigenie v vsichki posoki
-- what happens when the player dies
+- inventory
+- shops
+- lv up
+- TESTSSSS
 """
 
 
@@ -32,7 +35,7 @@ class Game(arcade.View):
         self.walls = None
         self.scene = None
         self.physics_engine = None
-        arcade.set_background_color(arcade.color.DARK_RED)
+        arcade.set_background_color(arcade.color.BLACK)
 
         # other useful stuff
         self.start_time = 0
@@ -91,6 +94,7 @@ class Game(arcade.View):
         arcade.start_render()
         self.scene.draw()
         self.player.draw()
+        self.player.inventory.draw()
         self.player.weapon_list.draw()
         self.text_box.draw_scaled(560, 744)
 
@@ -117,7 +121,7 @@ class Game(arcade.View):
         for enemy in self.enemies:
             enemy.update()
             if arcade.check_for_collision(self.player, enemy):
-                self.player.health -= 10
+                self.player.HP -= 10
                 tmp = randint(0, 4)
                 if tmp == 0:
                     enemy.center_y += 16
@@ -127,7 +131,7 @@ class Game(arcade.View):
                     enemy.center_x += 16
                 else:
                     enemy.center_x += -16
-                if self.player.health < 1:
+                if self.player.HP < 1:
                     game_over = GameOver()
                     self.window.show_view(game_over)
                     return

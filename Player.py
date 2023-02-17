@@ -1,24 +1,34 @@
 import arcade
 
+import Inventory
+
+
 # fix the weapon so it isnt a sprite but item class and the damage calculation
 
 
 class Player(arcade.Sprite):
     def __init__(self, path,  x, y, width, height):
-        super().__init__(path)
+        super(Player, self).__init__(path)
         self.screen_w = width
         self.screen_h = height
         self.center_x = x
         self.center_y = y
 
+        # movement
         self.speed = 8
         self.movement_distance = 0
         self.movement_direction = None
         self.look_dir = None
         self.p_class = "k"
 
-        self.health = 100
-        self.attack_power = 20
+        self.inventory = Inventory.Inventory("assets/UI/inventory.png")
+
+        # stats
+        self.HP = 100
+        self.DPS = 20
+        self.DEF = 0 # make it so the DEF works
+
+        # sprites
         self.weapon = None
         self.weapon_list = arcade.SpriteList()
 
