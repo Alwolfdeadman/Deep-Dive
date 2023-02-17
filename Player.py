@@ -24,15 +24,17 @@ class Player(arcade.Sprite):
         self.inventory = Inventory.Inventory("assets/UI/inventory.png")
 
         # stats
-        self.HP = 100
-        self.DPS = 20
-        self.DEF = 0 # make it so the DEF works
+        self.HP = self.inventory.hp
+        self.DPS = self.inventory.dps
+        self.DEF = self.inventory.deff  # make it so the DEF works
 
         # sprites
         self.weapon = None
         self.weapon_list = arcade.SpriteList()
 
     def update(self):
+        self.inventory.on_update()
+
         if self.movement_distance > 0:
             if self.movement_direction == "up":
                 self.center_y += self.speed
@@ -103,4 +105,3 @@ class Player(arcade.Sprite):
             self.weapon.center_x = self.center_x + 16
             self.weapon.center_y = self.center_y
         self.weapon_list.append(self.weapon)
-        # enemy.take_damage(self.attack_power)

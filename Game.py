@@ -95,6 +95,7 @@ class Game(arcade.View):
         self.scene.draw()
         self.player.draw()
         self.player.inventory.draw()
+        self.player.inventory.on_draw()
         self.player.weapon_list.draw()
         self.text_box.draw_scaled(560, 744)
 
@@ -121,7 +122,7 @@ class Game(arcade.View):
         for enemy in self.enemies:
             enemy.update()
             if arcade.check_for_collision(self.player, enemy):
-                self.player.HP -= 10
+                self.player.HP -= 20 - self.player.DEF
                 tmp = randint(0, 4)
                 if tmp == 0:
                     enemy.center_y += 16
