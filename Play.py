@@ -1,4 +1,5 @@
 import arcade
+import arcade.gui
 import Game
 
 SCREEN_W = 1488
@@ -6,33 +7,49 @@ SCREEN_H = 848
 
 
 class MainMenu(arcade.View):
-    def on_show_view(self):
+
+    def __init__(self):
+        super(MainMenu, self).__init__()
+        self.manager = arcade.gui.UIManager()
+        self.manager.enable()
+
         arcade.set_background_color(arcade.color.AMETHYST)
+        self.v_box = arcade.gui.UIBoxLayout()
 
-    def on_draw(self):
-        """Draw the menu"""
-        self.clear()
-        arcade.draw_text(
-            "Play",
-            SCREEN_W / 2,
-            SCREEN_H / 2 + 50,
-            arcade.color.BLACK,
-            font_size=30,
-            anchor_x="center",
-        )
-        arcade.draw_text(
-            "Exit",
-            SCREEN_W / 2,
-            SCREEN_H / 2 - 50,
-            arcade.color.BLACK,
-            font_size=30,
-            anchor_x="center",
+        start_button = arcade.gui.UIFlatButton(text="Start Game", width=200)
+        self.v_box.add(start_button.with_space_around(bottom=20))
+        start_button.on_click = self.on_click_start
+
+        quit_button = arcade.gui.UIFlatButton(text="Quit", width=200)
+        self.v_box.add(quit_button)
+        quit_button.on_click = self.on_click_quit
+
+        self.manager.add(
+            arcade.gui.UIAnchorWidget(
+                anchor_x="center_x",
+                anchor_y="center_y",
+                child=self.v_box)
         )
 
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        """Use a mouse press to advance to the 'game' view."""
+    def on_click_start(self, event):
         game_view = Game.Game()
         self.window.show_view(game_view)
+
+    def on_click_quit(self, event):
+        arcade.exit()
+
+    def on_draw(self):
+        """Draw the game overview"""
+        self.clear()
+        arcade.draw_text(
+            "Deep Dive",
+            SCREEN_W / 2,
+            SCREEN_H / 2 + 150,
+            arcade.color.BLACK,
+            font_size=30,
+            anchor_x="center",
+        )
+        self.manager.draw()
 
 
 def main():

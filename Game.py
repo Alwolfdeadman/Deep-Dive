@@ -1,4 +1,5 @@
 import arcade
+import arcade.gui
 import Player
 import Enemy
 from random import randint
@@ -12,6 +13,7 @@ SCREEN_H = 848  # 208
 - character sprite za dvigenie v vsichki posoki
 - what happens when the player dies
 """
+
 
 class Game(arcade.View):
     def __init__(self):
@@ -228,22 +230,46 @@ class Game(arcade.View):
 
 
 class GameOver(arcade.View):
-    def on_show_view(self):
+    def __init__(self):
+        super(GameOver, self).__init__()
+        self.manager = arcade.gui.UIManager()
+        self.manager.enable()
+
         arcade.set_background_color(arcade.color.BLACK)
+        self.v_box = arcade.gui.UIBoxLayout()
+
+        start_button = arcade.gui.UIFlatButton(text="Restart", width=200)
+        self.v_box.add(start_button.with_space_around(bottom=20))
+        start_button.on_click = self.on_click_start
+
+        quit_button = arcade.gui.UIFlatButton(text="Quit", width=200)
+        self.v_box.add(quit_button)
+        quit_button.on_click = self.on_click_quit
+
+        self.manager.add(
+            arcade.gui.UIAnchorWidget(
+                anchor_x="center_x",
+                anchor_y="center_y",
+                child=self.v_box)
+        )
+
+    def on_click_start(self, event):
+        game_view = Game()
+        self.window.show_view(game_view)
+
+    def on_click_quit(self, event):
+        arcade.exit()
 
     def on_draw(self):
         """Draw the game overview"""
         self.clear()
         arcade.draw_text(
-            "Game Over Click to Exit",
+            "Game Over",
             SCREEN_W / 2,
-            SCREEN_H / 2,
-            arcade.color.WHITE,
-            30,
+            SCREEN_H / 2 + 150,
+            arcade.color.BLACK,
+            font_size=30,
             anchor_x="center",
         )
+        self.manager.draw()
 
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        # game_view = Game()
-        # self.window.show_view(game_view)
-        arcade.close_window()
