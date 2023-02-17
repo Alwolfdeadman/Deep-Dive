@@ -48,5 +48,5 @@ class Enemy(arcade.Sprite):
         # to take damage from attacks
         for dam in self.damaging_textures:
             if arcade.check_for_collision(dam, self):
-                self.health -= self.player.DPS
+                self.health -= self.player.inventory.dps
                 break

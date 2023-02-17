@@ -1,6 +1,7 @@
 import arcade
 import arcade.gui
 import Player
+import Inventory
 import Enemy
 from random import randint
 import time
@@ -23,7 +24,8 @@ class Game(arcade.View):
         super().__init__()  # call the parent class init to create the window
         # player things
         self.player = None
-        self.p_sprite = "assets/TMP/0x72_16x16DungeonTileset.v5/items/npc_dwarf.png"
+        self.p_sprite = "assets/character_classes_and_animations/npc_dwarf.png"
+        self.p_invent = Inventory.Inventory("assets/UI/inventory.png")
 
         # physics and map
         self.room_number = 0
@@ -49,7 +51,7 @@ class Game(arcade.View):
     def setup(self):
         self.enemies = arcade.SpriteList()
         r_stats = self.find_cords(self.room_number)
-        self.player = Player.Player(self.p_sprite, r_stats[0], r_stats[1], SCREEN_W, SCREEN_H)
+        self.player = Player.Player(self.p_sprite, r_stats[0], r_stats[1], SCREEN_W, SCREEN_H, self.p_invent)
 
         # map/room preping and pyisics
         self.room_name = f"assets/maps/room{self.room_number}.tmx"
@@ -122,7 +124,7 @@ class Game(arcade.View):
         for enemy in self.enemies:
             enemy.update()
             if arcade.check_for_collision(self.player, enemy):
-                self.player.HP -= 20 - self.player.DEF
+                self.player.inventory.hp -= (20 - self.player.inventory.deff)
                 tmp = randint(0, 4)
                 if tmp == 0:
                     enemy.center_y += 16
@@ -132,7 +134,7 @@ class Game(arcade.View):
                     enemy.center_x += 16
                 else:
                     enemy.center_x += -16
-                if self.player.HP < 1:
+                if self.player.inventory.hp < 1:
                     game_over = GameOver()
                     self.window.show_view(game_over)
                     return

@@ -1,13 +1,10 @@
 import arcade
 
-import Inventory
-
-
 # fix the weapon so it isnt a sprite but item class and the damage calculation
 
 
 class Player(arcade.Sprite):
-    def __init__(self, path,  x, y, width, height):
+    def __init__(self, path,  x, y, width, height, inventory):
         super(Player, self).__init__(path)
         self.screen_w = width
         self.screen_h = height
@@ -21,20 +18,13 @@ class Player(arcade.Sprite):
         self.look_dir = None
         self.p_class = "k"
 
-        self.inventory = Inventory.Inventory("assets/UI/inventory.png")
-
-        # stats
-        self.HP = self.inventory.hp
-        self.DPS = self.inventory.dps
-        self.DEF = self.inventory.deff  # make it so the DEF works
+        self.inventory = inventory
 
         # sprites
         self.weapon = None
         self.weapon_list = arcade.SpriteList()
 
     def update(self):
-        self.inventory.on_update()
-
         if self.movement_distance > 0:
             if self.movement_direction == "up":
                 self.center_y += self.speed
@@ -76,6 +66,8 @@ class Player(arcade.Sprite):
             self.movement_direction = "right"
             self.movement_distance = dist
             self.look_dir = "right"
+        elif key == arcade.key.K:
+            self.inventory.use_pot()
 
     def on_key_release(self, key, modifiers):
         if key == arcade.key.W or key == arcade.key.S:

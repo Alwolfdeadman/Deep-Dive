@@ -9,7 +9,7 @@ class Inventory(arcade.Sprite):
         self.center_y = 360
 
         # items
-        self.pots = 0
+        self.pots = 2
         self.gold = 100
         self.helm = [10, "assets/items/helmet/helm_1.png"]
         self.chestplate = [10, "assets/items/chestplates/chestplate_1.png"]
@@ -20,14 +20,13 @@ class Inventory(arcade.Sprite):
         self.end = 1
         self.str = 1
 
-        self.hp = 0
-        self.dps = 0
-        self.deff = 0
+        self.max_HP = 90 + self.vit * 10
+        self.hp = 90 + self.vit * 10
+        self.dps = 10 + self.str * 5 + self.sword[0]
+        self.deff = 0 + self.end * 2 + (self.chestplate[0] + self.helm[0]) / 2
 
-    def on_update(self, delta_time: float = 1 / 60):
-        self.hp = 90 + self.vit*10
-        self.dps = 10 + self.str*5 + self.sword[0]
-        self.deff = 0 + self.end*2 + (self.chestplate[0]+self.helm[0])/2
+    def update(self):
+        pass
 
     def on_draw(self):
         # show the current level of equipment
@@ -111,3 +110,7 @@ class Inventory(arcade.Sprite):
             anchor_x="center",
         )
 
+    def use_pot(self):
+        if self.pots > 0:
+            self.pots -= 1
+            self.hp = (self.hp + 50) if (self.hp + 50 )< self.max_HP else self.max_HP
