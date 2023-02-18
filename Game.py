@@ -10,7 +10,6 @@ SCREEN_W = 1488  # 1120
 SCREEN_H = 848  # 208
 
 """"
-- undraw shops
 - chests
 - TESTSSSS
 """
@@ -319,6 +318,10 @@ class Game(arcade.View):
             self.b_smith_active = False
             self.shop_active = False
             self.manager3.enable()
+        else:
+            self.lv_mage_active = False
+            self.b_smith_active = False
+            self.shop_active = False
 
     def on_key_release(self, key, modifiers):
         self.player.on_key_release(key, modifiers)
