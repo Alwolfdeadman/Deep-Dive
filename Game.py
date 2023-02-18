@@ -116,14 +116,15 @@ class Game(arcade.View):
         self.manager3.add(enhance_end_button)
 
         # chest
-        if self.room_number == 2:
-            self.chest = Chest.Chest("assets/chests/chest_closed.png", 536, 174, self.player, p_invent)
-        elif self.room_number == 4:
-            self.chest = Chest.Chest("assets/chests/chest_closed.png", 760, 216, self.player, p_invent)
-        elif self.room_number == 7:
-            self.chest = Chest.Chest("assets/chests/chest_closed.png", 922, 520, self.player, p_invent)
-        elif self.room_number == 8:
-            self.chest = Chest.Chest("assets/chests/chest_closed.png", 720, 88, self.player, p_invent)
+        # if self.room_number == 2:
+        #     self.chest = Chest.Chest("assets/chests/chest_closed.png", 536, 174, self.player, p_invent)
+        # elif self.room_number == 4:
+        #     self.chest = Chest.Chest("assets/chests/chest_closed.png", 760, 216, self.player, p_invent)
+        # elif self.room_number == 7:
+        #     self.chest = Chest.Chest("assets/chests/chest_closed.png", 922, 520, self.player, p_invent)
+        # elif self.room_number == 8:
+        #     self.chest = Chest.Chest("assets/chests/chest_closed.png", 720, 88, self.player, p_invent)
+
 
     def setup(self):
         self.enemies = arcade.SpriteList()
@@ -172,7 +173,8 @@ class Game(arcade.View):
     def on_draw(self):
         arcade.start_render()
         self.scene.draw()
-        self.chest.draw()
+        # if self.room_number in [2, 4, 7, 8]:
+        #     self.chest.draw()
         self.player.draw()
         self.player.inventory.draw()
         self.player.inventory.on_draw()
@@ -237,7 +239,8 @@ class Game(arcade.View):
         self.physics_engine.update()
 
         # chest
-        self.chest.update()
+        # if self.room_number in [2, 4, 7, 8]:
+        #     self.chest.update()
 
         # check for collision between enemies and enemies and enemies and player
         for enemy in self.enemies:

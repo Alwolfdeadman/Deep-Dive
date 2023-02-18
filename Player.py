@@ -1,7 +1,5 @@
 import arcade
 
-# fix the weapon so it isnt a sprite but item class and the damage calculation
-
 
 class Player(arcade.Sprite):
     def __init__(self, path,  x, y, width, height, inventory):

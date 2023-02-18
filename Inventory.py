@@ -110,4 +110,4 @@ class Inventory(arcade.Sprite):
     def use_pot(self):
         if self.pots > 0:
             self.pots -= 1
-            self.hp = (self.hp + 50) if (self.hp + 50 )< self.max_HP else self.max_HP
+            self.hp = (self.hp + 50) if (self.hp + 50) < self.max_HP else self.max_HP

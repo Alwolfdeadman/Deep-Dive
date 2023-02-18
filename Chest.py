@@ -13,7 +13,6 @@ class Chest(arcade.Sprite):
 
     def update(self):
         if arcade.check_for_collision(self.p, self) and self.if_openable:
-            print("hi")
             self.if_openable = False
             what_to_add = randint(1, 100)
             if what_to_add in range(28, 100):
