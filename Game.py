@@ -10,7 +10,8 @@ SCREEN_W = 1488  # 1120
 SCREEN_H = 848  # 208
 p_invent = Inventory.Inventory("assets/UI/inventory.png")
 
-""""
+"""
+- different classes
 - chests
 - TESTSSSS
 """
