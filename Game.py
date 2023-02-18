@@ -59,25 +59,28 @@ class Game(arcade.View):
         buy_pot_button.on_click = self.on_click_add_pots
         self.manager1.add(buy_pot_button)
 
-        #blacksmith
+        # blacksmith
         self.b_smith = arcade.Sprite("assets/npcs/npc_dwarf_2.png", center_x=440, center_y=296)
         self.b_smith_active = False
         self.manager2 = arcade.gui.UIManager()
-        upgrade_sword_button = arcade.gui.UIFlatButton(x=200, y=750, text="Upgrade Sword", width=200, height=30, style={
-            "border_width": 0,
-            "border_radius": 10,
-            "bg_color": arcade.color.CHARCOAL,
-        })
-        upgrade_chestplate_button = arcade.gui.UIFlatButton(x=430, y=750, text="Upgrade Chestplate", width=240, height=30, style={
-            "border_width": 0,
-            "border_radius": 10,
-            "bg_color": arcade.color.CHARCOAL,
-        })
-        upgrade_helm_button = arcade.gui.UIFlatButton(x=700, y=750, text="Upgrade Helm", width=200, height=30, style={
-            "border_width": 0,
-            "border_radius": 10,
-            "bg_color": arcade.color.CHARCOAL,
-        })
+        upgrade_sword_button = arcade.gui.UIFlatButton(
+            x=200, y=750, text="Upgrade Sword", width=200, height=30, style={
+                "border_width": 0,
+                "border_radius": 10,
+                "bg_color": arcade.color.CHARCOAL,
+            })
+        upgrade_chestplate_button = arcade.gui.UIFlatButton(
+            x=430, y=750, text="Upgrade Chestplate", width=240, height=30, style={
+                "border_width": 0,
+                "border_radius": 10,
+                "bg_color": arcade.color.CHARCOAL,
+            })
+        upgrade_helm_button = arcade.gui.UIFlatButton(
+            x=700, y=750, text="Upgrade Helm", width=200, height=30, style={
+                "border_width": 0,
+                "border_radius": 10,
+                "bg_color": arcade.color.CHARCOAL,
+            })
         upgrade_sword_button.on_click = self.on_click_upgrade_sword
         upgrade_chestplate_button.on_click = self.on_click_upgrade_chestplate
         upgrade_helm_button.on_click = self.on_click_upgrade_helm
@@ -306,17 +309,20 @@ class Game(arcade.View):
         spr_lst.append(self.shop)
         spr_lst.append(self.b_smith)
         spr_lst.append(self.lv_mage)
-        if key == arcade.key.L and self.shop in arcade.get_sprites_at_point((self.player.center_x - 16, self.player.center_y), spr_lst):
+        if key == arcade.key.L and self.shop in arcade.get_sprites_at_point(
+                (self.player.center_x - 16, self.player.center_y), spr_lst):
             self.shop_active = True
             self.b_smith_active = False
             self.lv_mage_active = False
             self.manager1.enable()
-        elif key == arcade.key.L and self.b_smith in arcade.get_sprites_at_point((self.player.center_x - 16, self.player.center_y), spr_lst):
+        elif key == arcade.key.L and self.b_smith in arcade.get_sprites_at_point(
+                (self.player.center_x - 16, self.player.center_y), spr_lst):
             self.b_smith_active = True
             self.shop_active = False
             self.lv_mage_active = False
             self.manager2.enable()
-        elif key == arcade.key.L and self.lv_mage in arcade.get_sprites_at_point((self.player.center_x + 16, self.player.center_y), spr_lst):
+        elif key == arcade.key.L and self.lv_mage in arcade.get_sprites_at_point(
+                (self.player.center_x + 16, self.player.center_y), spr_lst):
             self.lv_mage_active = True
             self.b_smith_active = False
             self.shop_active = False
