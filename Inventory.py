@@ -11,9 +11,9 @@ class Inventory(arcade.Sprite):
         # items
         self.pots = 2
         self.gold = 100
-        self.helm = [10, "assets/items/helmet/helm_1.png"]
-        self.chestplate = [10, "assets/items/chestplates/chestplate_1.png"]
-        self.sword = [5, "assets/items/swords/sword_1.png"]
+        self.helm = [10, "assets/items/helmet/helm_1.png", 1]
+        self.chestplate = [10, "assets/items/chestplates/chestplate_1.png", 1]
+        self.sword = [5, "assets/items/swords/sword_1.png", 1]
 
         # stats
         self.vit = 1
@@ -24,9 +24,6 @@ class Inventory(arcade.Sprite):
         self.hp = 90 + self.vit * 10
         self.dps = 10 + self.str * 5 + self.sword[0]
         self.deff = 0 + self.end * 2 + (self.chestplate[0] + self.helm[0]) / 2
-
-    def update(self):
-        pass
 
     def on_draw(self):
         # show the current level of equipment

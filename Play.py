@@ -39,7 +39,6 @@ class MainMenu(arcade.View):
         arcade.exit()
 
     def on_draw(self):
-        """Draw the game overview"""
         self.clear()
         arcade.draw_text(
             "Deep Dive",
