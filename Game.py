@@ -8,6 +8,8 @@ import time
 
 SCREEN_W = 1488  # 1120
 SCREEN_H = 848  # 208
+p_invent = Inventory.Inventory("assets/UI/inventory.png")
+p_invent.hp = p_invent.max_HP
 
 """"
 - chests
@@ -21,7 +23,8 @@ class Game(arcade.View):
         # player things
         self.player = None
         self.p_sprite = "assets/character_classes_and_animations/npc_dwarf.png"
-        self.p_invent = Inventory.Inventory("assets/UI/inventory.png")
+        self.p_invent = p_invent
+        self.p_invent.hp = self.p_invent.max_HP
         arcade.set_background_color(arcade.color.BLACK)
 
         # physics and map
