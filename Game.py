@@ -9,7 +9,6 @@ import time
 SCREEN_W = 1488  # 1120
 SCREEN_H = 848  # 208
 p_invent = Inventory.Inventory("assets/UI/inventory.png")
-p_invent.hp = p_invent.max_HP
 
 """"
 - chests
