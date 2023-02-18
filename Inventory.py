@@ -69,7 +69,7 @@ class Inventory(arcade.Sprite):
         arcade.draw_text(
             self.str,
             1250,
-            230,
+            278,
             arcade.color.BLACK,
             font_size=16,
             anchor_x="center",
@@ -77,7 +77,7 @@ class Inventory(arcade.Sprite):
         arcade.draw_text(
             self.end,
             1250,
-            278,
+            230,
             arcade.color.BLACK,
             font_size=16,
             anchor_x="center",

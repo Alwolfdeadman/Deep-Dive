@@ -11,7 +11,6 @@ SCREEN_H = 848  # 208
 
 """"
 - undraw shops
-- lv up
 - chests
 - TESTSSSS
 """
@@ -50,7 +49,6 @@ class Game(arcade.View):
         self.shop = arcade.Sprite("assets/npcs/npc_sage.png", center_x=440, center_y=200,)
         self.shop_active = False
         self.manager1 = arcade.gui.UIManager()
-        self.manager1.enable()
         buy_pot_button = arcade.gui.UIFlatButton(x=200, y=750, text="Buy Pots", width=100, height=30, style={
             "border_width": 0,
             "border_radius": 10,
@@ -63,7 +61,6 @@ class Game(arcade.View):
         self.b_smith = arcade.Sprite("assets/npcs/npc_dwarf_2.png", center_x=440, center_y=296)
         self.b_smith_active = False
         self.manager2 = arcade.gui.UIManager()
-        self.manager2.enable()
         upgrade_sword_button = arcade.gui.UIFlatButton(x=200, y=750, text="Upgrade Sword", width=200, height=30, style={
             "border_width": 0,
             "border_radius": 10,
@@ -90,7 +87,6 @@ class Game(arcade.View):
         self.lv_mage = arcade.Sprite("assets/npcs/npc_wizzard_1.png", center_x=678, center_y=216)
         self.lv_mage_active = False
         self.manager3 = arcade.gui.UIManager()
-        self.manager3.enable()
         enhance_vit_button = arcade.gui.UIFlatButton(x=200, y=750, text="Enhance VIT", width=200, height=30, style={
             "border_width": 0,
             "border_radius": 10,
@@ -101,17 +97,17 @@ class Game(arcade.View):
             "border_radius": 10,
             "bg_color": arcade.color.CHARCOAL,
         })
-        enhance_def_button = arcade.gui.UIFlatButton(x=700, y=750, text="Enhance END", width=200, height=30, style={
+        enhance_end_button = arcade.gui.UIFlatButton(x=700, y=750, text="Enhance END", width=200, height=30, style={
             "border_width": 0,
             "border_radius": 10,
             "bg_color": arcade.color.CHARCOAL,
         })
         enhance_vit_button.on_click = self.on_click_enhance_vit
         enhance_str_button.on_click = self.on_click_enhance_str
-        enhance_def_button.on_click = self.on_click_enhance_def
+        enhance_end_button.on_click = self.on_click_enhance_end
         self.manager3.add(enhance_vit_button)
         self.manager3.add(enhance_str_button)
-        self.manager3.add(enhance_def_button)
+        self.manager3.add(enhance_end_button)
 
     def setup(self):
         self.enemies = arcade.SpriteList()
@@ -310,10 +306,19 @@ class Game(arcade.View):
         spr_lst.append(self.lv_mage)
         if key == arcade.key.L and self.shop in arcade.get_sprites_at_point((self.player.center_x - 16, self.player.center_y), spr_lst):
             self.shop_active = True
+            self.b_smith_active = False
+            self.lv_mage_active = False
+            self.manager1.enable()
         elif key == arcade.key.L and self.b_smith in arcade.get_sprites_at_point((self.player.center_x - 16, self.player.center_y), spr_lst):
             self.b_smith_active = True
+            self.shop_active = False
+            self.lv_mage_active = False
+            self.manager2.enable()
         elif key == arcade.key.L and self.lv_mage in arcade.get_sprites_at_point((self.player.center_x + 16, self.player.center_y), spr_lst):
             self.lv_mage_active = True
+            self.b_smith_active = False
+            self.shop_active = False
+            self.manager3.enable()
 
     def on_key_release(self, key, modifiers):
         self.player.on_key_release(key, modifiers)
@@ -390,7 +395,7 @@ class Game(arcade.View):
             self.p_invent.str += 1
             self.p_invent.dps = 10 + self.p_invent.str * 5 + self.p_invent.sword[0]
 
-    def on_click_enhance_def(self, event):
+    def on_click_enhance_end(self, event):
         mod = self.p_invent.end
         if self.p_invent.gold >= 50*mod:
             self.p_invent.gold -= 50*mod

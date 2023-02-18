@@ -11,6 +11,8 @@ class Enemy(arcade.Sprite):
         self.walls = walls
         self.center_x = x
         self.center_y = y
+        self.change_x = 0.3
+        self.change_y = 0.3
         self.health = randint(7, 10)*room_count
 
         self.num_of_monster = num
@@ -33,17 +35,17 @@ class Enemy(arcade.Sprite):
 
         # to follow the player
         if self.player.center_x == self.center_x:
-            self.center_x += 0
+            self.center_x += 0*self.change_x
         elif self.player.center_x < self.center_x:
-            self.center_x += -0.3
+            self.center_x += -1*self.change_x
         elif self.player.center_x > self.center_x:
-            self.center_x += 0.3
+            self.center_x += self.change_x
         if self.player.center_y == self.center_y:
-            self.center_y += 0
+            self.center_y += 0*self.change_y
         elif self.player.center_y < self.center_y:
-            self.center_y += -0.3
+            self.center_y += -1*self.change_y
         elif self.player.center_y > self.center_y:
-            self.center_y += 0.3
+            self.center_y += self.change_y
 
         # to take damage from attacks
         for dam in self.damaging_textures:
