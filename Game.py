@@ -3,6 +3,7 @@ import arcade.gui
 import Player
 import Inventory
 import Enemy
+import Chest
 from random import randint
 import time
 
@@ -12,7 +13,6 @@ p_invent = Inventory.Inventory("assets/UI/inventory.png")
 
 """
 - different classes
-- chests
 - TESTSSSS
 """
 
@@ -28,7 +28,7 @@ class Game(arcade.View):
         arcade.set_background_color(arcade.color.BLACK)
 
         # physics and map
-        self.room_number = 0
+        self.room_number = 2
         self.tile_map = None
         self.room_name = None
         self.num_enemies = 0
@@ -59,25 +59,28 @@ class Game(arcade.View):
         buy_pot_button.on_click = self.on_click_add_pots
         self.manager1.add(buy_pot_button)
 
-        #blacksmith
+        # blacksmith
         self.b_smith = arcade.Sprite("assets/npcs/npc_dwarf_2.png", center_x=440, center_y=296)
         self.b_smith_active = False
         self.manager2 = arcade.gui.UIManager()
-        upgrade_sword_button = arcade.gui.UIFlatButton(x=200, y=750, text="Upgrade Sword", width=200, height=30, style={
-            "border_width": 0,
-            "border_radius": 10,
-            "bg_color": arcade.color.CHARCOAL,
-        })
-        upgrade_chestplate_button = arcade.gui.UIFlatButton(x=430, y=750, text="Upgrade Chestplate", width=240, height=30, style={
-            "border_width": 0,
-            "border_radius": 10,
-            "bg_color": arcade.color.CHARCOAL,
-        })
-        upgrade_helm_button = arcade.gui.UIFlatButton(x=700, y=750, text="Upgrade Helm", width=200, height=30, style={
-            "border_width": 0,
-            "border_radius": 10,
-            "bg_color": arcade.color.CHARCOAL,
-        })
+        upgrade_sword_button = arcade.gui.UIFlatButton(
+            x=200, y=750, text="Upgrade Sword", width=200, height=30, style={
+                "border_width": 0,
+                "border_radius": 10,
+                "bg_color": arcade.color.CHARCOAL,
+            })
+        upgrade_chestplate_button = arcade.gui.UIFlatButton(
+            x=430, y=750, text="Upgrade Chestplate", width=240, height=30, style={
+                "border_width": 0,
+                "border_radius": 10,
+                "bg_color": arcade.color.CHARCOAL,
+            })
+        upgrade_helm_button = arcade.gui.UIFlatButton(
+            x=700, y=750, text="Upgrade Helm", width=200, height=30, style={
+                "border_width": 0,
+                "border_radius": 10,
+                "bg_color": arcade.color.CHARCOAL,
+            })
         upgrade_sword_button.on_click = self.on_click_upgrade_sword
         upgrade_chestplate_button.on_click = self.on_click_upgrade_chestplate
         upgrade_helm_button.on_click = self.on_click_upgrade_helm
@@ -110,6 +113,16 @@ class Game(arcade.View):
         self.manager3.add(enhance_vit_button)
         self.manager3.add(enhance_str_button)
         self.manager3.add(enhance_end_button)
+
+        # chest
+        if self.room_number == 2:
+            self.chest = Chest.Chest("assets/chests/chest_closed.png", 536, 174, self.player, p_invent)
+        elif self.room_number == 4:
+            self.chest = Chest.Chest("assets/chests/chest_closed.png", 760, 216, self.player, p_invent)
+        elif self.room_number == 7:
+            self.chest = Chest.Chest("assets/chests/chest_closed.png", 922, 520, self.player, p_invent)
+        elif self.room_number == 8:
+            self.chest = Chest.Chest("assets/chests/chest_closed.png", 720, 88, self.player, p_invent)
 
     def setup(self):
         self.enemies = arcade.SpriteList()
@@ -158,6 +171,7 @@ class Game(arcade.View):
     def on_draw(self):
         arcade.start_render()
         self.scene.draw()
+        self.chest.draw()
         self.player.draw()
         self.player.inventory.draw()
         self.player.inventory.on_draw()
@@ -220,6 +234,9 @@ class Game(arcade.View):
         r_stats = self.find_cords(self.room_number)
         self.player.update()
         self.physics_engine.update()
+
+        # chest
+        self.chest.update()
 
         # check for collision between enemies and enemies and enemies and player
         for enemy in self.enemies:
@@ -306,17 +323,20 @@ class Game(arcade.View):
         spr_lst.append(self.shop)
         spr_lst.append(self.b_smith)
         spr_lst.append(self.lv_mage)
-        if key == arcade.key.L and self.shop in arcade.get_sprites_at_point((self.player.center_x - 16, self.player.center_y), spr_lst):
+        if key == arcade.key.L and self.shop in arcade.get_sprites_at_point(
+                (self.player.center_x - 16, self.player.center_y), spr_lst):
             self.shop_active = True
             self.b_smith_active = False
             self.lv_mage_active = False
             self.manager1.enable()
-        elif key == arcade.key.L and self.b_smith in arcade.get_sprites_at_point((self.player.center_x - 16, self.player.center_y), spr_lst):
+        elif key == arcade.key.L and self.b_smith in arcade.get_sprites_at_point(
+                (self.player.center_x - 16, self.player.center_y), spr_lst):
             self.b_smith_active = True
             self.shop_active = False
             self.lv_mage_active = False
             self.manager2.enable()
-        elif key == arcade.key.L and self.lv_mage in arcade.get_sprites_at_point((self.player.center_x + 16, self.player.center_y), spr_lst):
+        elif key == arcade.key.L and self.lv_mage in arcade.get_sprites_at_point(
+                (self.player.center_x + 16, self.player.center_y), spr_lst):
             self.lv_mage_active = True
             self.b_smith_active = False
             self.shop_active = False
