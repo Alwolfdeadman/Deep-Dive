@@ -12,7 +12,8 @@ SCREEN_H = 848  # 208
 p_invent = Inventory.Inventory("assets/UI/inventory.png")
 
 """
-- different classes
+- different classes for player and enemy
+- resize the dungeon
 - TESTSSSS
 """
 
@@ -28,7 +29,7 @@ class Game(arcade.View):
         arcade.set_background_color(arcade.color.BLACK)
 
         # physics and map
-        self.room_number = 2
+        self.room_number = 0
         self.tile_map = None
         self.room_name = None
         self.num_enemies = 0
