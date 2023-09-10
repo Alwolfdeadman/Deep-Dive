@@ -111,3 +111,52 @@ class Inventory(arcade.Sprite):
         if self.pots > 0:
             self.pots -= 1
             self.hp = (self.hp + 50) if (self.hp + 50) < self.max_HP else self.max_HP
+
+    def add_gold(self, gold):
+        self.gold += gold
+
+    def add_pot(self):
+        if self.gold >= 35:
+            self.pots += 1
+            self.gold -= 35
+
+    def uprgrade_helm(self):
+        if self.gold >= 75 * self.helm[2]:
+            self.gold -= 75 * self.helm[2]
+            self.helm = [
+                10 * (self.helm[2] + 1), f"assets/items/helmet/helm_{self.helm[2] + 1}.png", self.helm[2] + 1]
+            self.deff = 0 + self.end * 2 + (self.chestplate[0] + self.helm[0]) / 2
+
+    def uprgrade_sword(self):
+        if self.gold >= 100 * self.sword[2]:
+            self.gold -= 100 * self.sword[2]
+            self.sword = \
+                [5 * (self.sword[2] + 1), f"assets/items/swords/sword_{self.sword[2] + 1}.png", self.sword[2] + 1]
+            self.dps = 10 + self.str * 5 + self.sword[0]
+
+    def uprgrade_chestplate(self):
+        if self.gold >= 150 * self.chestplate[2]:
+            self.gold -= 150 * self.chestplate[2]
+            self.chestplate = \
+                [10 * (self.chestplate[2] + 1), f"assets/items/chestplates/chestplate_{self.chestplate[2] + 1}.png", self.chestplate[2] + 1]
+            self.deff = 0 + self.end * 2 + (self.chestplate[0] + self.helm[0]) / 2
+
+    def enhance_vit(self):
+        if self.gold >= 50*self.vit:
+            self.gold -= 50*self.vit
+            self.vit += 1
+            self.hp = 90 + self.vit * 10
+            self.max_HP = self.hp
+
+    def enhance_str(self):
+        if self.gold >= 50*self.str:
+            self.gold -= 50*self.str
+            self.str += 1
+            self.dps = 10 + self.str * 5 + self.sword[0]
+
+    def enhance_end(self):
+        if self.gold >= 50*self.end:
+            self.gold -= 50*self.end
+            self.end += 1
+            self.deff = 0 + self.end * 2 + (self.chestplate[0] + self.helm[0]) / 2
+

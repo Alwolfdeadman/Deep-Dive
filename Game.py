@@ -1,7 +1,6 @@
 import arcade
 import arcade.gui
 import Player
-import Inventory
 import Enemy
 import Chest
 from random import randint
@@ -9,7 +8,6 @@ import time
 
 SCREEN_W = 1488  # 1120
 SCREEN_H = 848  # 208
-p_invent = Inventory.Inventory("assets/UI/inventory.png")
 
 """
 - different classes for player and enemy
@@ -24,8 +22,7 @@ class Game(arcade.View):
         # player things
         self.player = None
         self.p_sprite = "assets/character_classes_and_animations/npc_dwarf.png"
-        self.p_invent = p_invent
-        self.p_invent.hp = self.p_invent.max_HP
+        # self.p_invent = p_invent
         arcade.set_background_color(arcade.color.BLACK)
 
         # physics and map
@@ -125,11 +122,10 @@ class Game(arcade.View):
         # elif self.room_number == 8:
         #     self.chest = Chest.Chest("assets/chests/chest_closed.png", 720, 88, self.player, p_invent)
 
-
     def setup(self):
         self.enemies = arcade.SpriteList()
         r_stats = self.find_cords(self.room_number)
-        self.player = Player.Player(self.p_sprite, r_stats[0], r_stats[1], SCREEN_W, SCREEN_H, self.p_invent)
+        self.player = Player.Player(self.p_sprite, r_stats[0], r_stats[1], SCREEN_W, SCREEN_H)
 
         # map/room preping and pyisics
         self.room_name = f"assets/maps/room{self.room_number}.tmx"
@@ -217,13 +213,13 @@ class Game(arcade.View):
 
         # so that the enemies vanish after death
         for enemy in self.enemies:
-            if enemy.health > 1:
+            if enemy.is_alive():
                 enemy.draw()
             else:
                 if self.room_number == 11:
-                    self.p_invent.gold += 30*self.room_number
+                    self.player.add_gold(30*self.room_number)
                 else:
-                    self.p_invent.gold += 10*self.room_number
+                    self.player.add_gold(10*self.room_number)
                 self.enemies.remove(enemy)
 
         # used so that the sword stays on screen for a bit
@@ -385,52 +381,25 @@ class Game(arcade.View):
         return tmp
 
     def on_click_add_pots(self, event):
-        if self.p_invent.gold >= 35:
-            self.p_invent.pots += 1
-            self.p_invent.gold -= 35
+        self.player.add_pot()
 
     def on_click_upgrade_sword(self, event):
-        mod = self.p_invent.sword[2]
-        if self.p_invent.gold >= 100*mod:
-            self.p_invent.gold -= 100*mod
-            self.p_invent.sword = [5*(mod+1), f"assets/items/swords/sword_{mod + 1}.png", mod + 1]
-            self.p_invent.dps = 10 + self.p_invent.str * 5 + self.p_invent.sword[0]
+        self.player.upgrade_sword()
 
     def on_click_upgrade_chestplate(self, event):
-        mod = self.p_invent.chestplate[2]
-        if self.p_invent.gold >= 150 * mod:
-            self.p_invent.gold -= 150 * mod
-            self.p_invent.chestplate = [10 * (mod + 1), f"assets/items/chestplates/chestplate_{mod + 1}.png", mod + 1]
-            self.p_invent.deff = 0 + self.p_invent.end * 2 + (self.p_invent.chestplate[0] + self.p_invent.helm[0]) / 2
+        self.player.upgrade_chestplate()
 
     def on_click_upgrade_helm(self, event):
-        mod = self.p_invent.helm[2]
-        if self.p_invent.gold >= 75 * mod:
-            self.p_invent.gold -= 75 * mod
-            self.p_invent.helm = [10 * (mod + 1), f"assets/items/helmet/helm_{mod + 1}.png", mod + 1]
-            self.p_invent.deff = 0 + self.p_invent.end * 2 + (self.p_invent.chestplate[0] + self.p_invent.helm[0]) / 2
+        self.player.upgrade_helm()
 
     def on_click_enhance_vit(self, event):
-        mod = self.p_invent.vit
-        if self.p_invent.gold >= 50*mod:
-            self.p_invent.gold -= 50*mod
-            self.p_invent.vit += 1
-            self.p_invent.hp = 90 + self.p_invent.vit * 10
-            self.p_invent.max_HP = self.p_invent.hp
+        self.player.enhance_vit()
 
     def on_click_enhance_str(self, event):
-        mod = self.p_invent.str
-        if self.p_invent.gold >= 50*mod:
-            self.p_invent.gold -= 50*mod
-            self.p_invent.str += 1
-            self.p_invent.dps = 10 + self.p_invent.str * 5 + self.p_invent.sword[0]
+        self.player.enhance_str()
 
     def on_click_enhance_end(self, event):
-        mod = self.p_invent.end
-        if self.p_invent.gold >= 50*mod:
-            self.p_invent.gold -= 50*mod
-            self.p_invent.end += 1
-            self.p_invent.deff = 0 + self.p_invent.end * 2 + (self.p_invent.chestplate[0] + self.p_invent.helm[0]) / 2
+        self.player.enhance_def()
 
 
 class GameOver(arcade.View):

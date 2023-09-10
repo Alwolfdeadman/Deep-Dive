@@ -1,13 +1,17 @@
 import arcade
+import Inventory
 
 
 class Player(arcade.Sprite):
-    def __init__(self, path,  x, y, width, height, inventory):
+    def __init__(self, path,  x, y, width, height):
         super(Player, self).__init__()
         self.screen_w = width
         self.screen_h = height
         self.center_x = x
         self.center_y = y
+
+        self.inventory = Inventory.Inventory("assets/UI/inventory.png")
+        self.inventory.hp = self.inventory.max_HP
 
         # movement
         self.speed = 8
@@ -16,13 +20,12 @@ class Player(arcade.Sprite):
         self.look_dir = None
         self.p_class = "k"
 
-        self.inventory = inventory
-
         # sprites
         self.weapon = None
         self.weapon_list = arcade.SpriteList()
         self.player_sprites = [arcade.load_texture(path), arcade.load_texture(path, flipped_horizontally=True)]
         self.texture = self.player_sprites[1]
+
 
     def update(self):
         if self.movement_distance > 0:
@@ -99,3 +102,27 @@ class Player(arcade.Sprite):
             self.weapon.center_x = self.center_x + 16
             self.weapon.center_y = self.center_y
         self.weapon_list.append(self.weapon)
+
+    def add_gold(self, gold):
+        self.inventory.add_gold(gold)
+
+    def add_pot(self):
+        self.inventory.add_pot()
+
+    def upgrade_sword(self):
+        self.inventory.uprgrade_sword()
+
+    def upgrade_helm(self):
+        self.inventory.uprgrade_helm()
+
+    def upgrade_chestplate(self):
+        self.inventory.uprgrade_chestplate()
+
+    def enhance_vit(self):
+        self.inventory.enhance_vit()
+
+    def enhance_str(self):
+        self.inventory.enhance_str()
+
+    def enhance_end(self):
+        self.inventory.enhance_end()

@@ -50,3 +50,9 @@ class Enemy(arcade.Sprite):
             if arcade.check_for_collision(dam, self):
                 self.health -= self.player.inventory.dps
                 break
+
+    def is_alive(self):
+        if self.health > 1:
+            return True
+        return False
+
