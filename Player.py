@@ -3,7 +3,7 @@ import arcade
 
 class Player(arcade.Sprite):
     def __init__(self, path,  x, y, width, height, inventory):
-        super(Player, self).__init__(path)
+        super(Player, self).__init__()
         self.screen_w = width
         self.screen_h = height
         self.center_x = x
@@ -21,6 +21,8 @@ class Player(arcade.Sprite):
         # sprites
         self.weapon = None
         self.weapon_list = arcade.SpriteList()
+        self.player_sprites = [arcade.load_texture(path), arcade.load_texture(path, flipped_horizontally=True)]
+        self.texture = self.player_sprites[1]
 
     def update(self):
         if self.movement_distance > 0:
@@ -60,10 +62,12 @@ class Player(arcade.Sprite):
             self.movement_direction = "left"
             self.movement_distance = dist
             self.look_dir = "left"
+            self.texture = self.player_sprites[1]
         elif key == arcade.key.D:
             self.movement_direction = "right"
             self.movement_distance = dist
             self.look_dir = "right"
+            self.texture = self.player_sprites[0]
         elif key == arcade.key.K:
             self.inventory.use_pot()
 

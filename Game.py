@@ -247,9 +247,9 @@ class Game(arcade.View):
             enemy.update()
             if arcade.check_for_collision(self.player, enemy):
                 if self.room_number == 11:
-                    self.player.inventory.hp -= (40 - self.player.inventory.deff)
+                    self.player.inventory.hp -= 40 % self.player.inventory.deff
                 else:
-                    self.player.inventory.hp -= (20 - self.player.inventory.deff)
+                    self.player.inventory.hp -= 20 % self.player.inventory.deff
                 tmp = randint(0, 4)
                 if tmp == 0:
                     enemy.center_y += 16
