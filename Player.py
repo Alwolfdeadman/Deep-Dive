@@ -106,6 +106,11 @@ class Player(arcade.Sprite):
     def add_gold(self, gold):
         self.inventory.add_gold(gold)
 
+    def is_dead(self):
+        if self.inventory.get_hp() >= 1:
+            return False
+        return True
+
     def add_pot(self):
         self.inventory.add_pot()
 

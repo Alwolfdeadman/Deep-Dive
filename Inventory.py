@@ -115,6 +115,9 @@ class Inventory(arcade.Sprite):
     def add_gold(self, gold):
         self.gold += gold
 
+    def get_hp(self):
+        return self.hp
+
     def add_pot(self):
         if self.gold >= 35:
             self.pots += 1

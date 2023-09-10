@@ -246,29 +246,13 @@ class Game(arcade.View):
                     self.player.inventory.hp -= 40 % self.player.inventory.deff
                 else:
                     self.player.inventory.hp -= 20 % self.player.inventory.deff
-                tmp = randint(0, 4)
-                if tmp == 0:
-                    enemy.center_y += 16
-                elif tmp == 1:
-                    enemy.center_y += -16
-                elif tmp == 2:
-                    enemy.center_x += 16
-                else:
-                    enemy.center_x += -16
-                if self.player.inventory.hp < 1:
+                enemy.change_pos_random(24)
+                if self.player.is_dead():
                     game_over = GameOver()
                     self.window.show_view(game_over)
                     return
             elif arcade.check_for_collision_with_list(enemy, self.enemies):
-                tmp = randint(0, 4)
-                if tmp == 0:
-                    enemy.center_y += 8
-                elif tmp == 1:
-                    enemy.center_y += -2
-                elif tmp == 2:
-                    enemy.center_x += 8
-                else:
-                    enemy.center_x += -2
+                enemy.change_pos_random(8)
 
         # movement between rooms
         self.num_enemies = len(self.enemies)
@@ -323,24 +307,25 @@ class Game(arcade.View):
         spr_lst.append(self.shop)
         spr_lst.append(self.b_smith)
         spr_lst.append(self.lv_mage)
-        if key == arcade.key.L and self.shop in arcade.get_sprites_at_point(
-                (self.player.center_x - 16, self.player.center_y), spr_lst):
-            self.shop_active = True
-            self.b_smith_active = False
-            self.lv_mage_active = False
-            self.manager1.enable()
-        elif key == arcade.key.L and self.b_smith in arcade.get_sprites_at_point(
-                (self.player.center_x - 16, self.player.center_y), spr_lst):
-            self.b_smith_active = True
-            self.shop_active = False
-            self.lv_mage_active = False
-            self.manager2.enable()
-        elif key == arcade.key.L and self.lv_mage in arcade.get_sprites_at_point(
-                (self.player.center_x + 16, self.player.center_y), spr_lst):
-            self.lv_mage_active = True
-            self.b_smith_active = False
-            self.shop_active = False
-            self.manager3.enable()
+        if key == arcade.key.L:
+            if self.shop in arcade.get_sprites_at_point(
+                    (self.player.center_x - 16, self.player.center_y), spr_lst):
+                self.shop_active = True
+                self.b_smith_active = False
+                self.lv_mage_active = False
+                self.manager1.enable()
+            elif self.b_smith in arcade.get_sprites_at_point(
+                    (self.player.center_x - 16, self.player.center_y), spr_lst):
+                self.b_smith_active = True
+                self.shop_active = False
+                self.lv_mage_active = False
+                self.manager2.enable()
+            elif self.lv_mage in arcade.get_sprites_at_point(
+                    (self.player.center_x + 16, self.player.center_y), spr_lst):
+                self.lv_mage_active = True
+                self.b_smith_active = False
+                self.shop_active = False
+                self.manager3.enable()
         else:
             self.lv_mage_active = False
             self.b_smith_active = False

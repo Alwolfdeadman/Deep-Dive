@@ -56,3 +56,14 @@ class Enemy(arcade.Sprite):
             return True
         return False
 
+    def change_pos_random(self, steps):
+        tmp = randint(0, 4)
+        if tmp == 0:
+            self.center_y += steps
+        elif tmp == 1:
+            self.center_y += -steps
+        elif tmp == 2:
+            self.center_x += steps
+        else:
+            self.center_x += -steps
+
